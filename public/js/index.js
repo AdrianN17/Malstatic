@@ -156,6 +156,8 @@ function getFlossInfo(floss)
     document.getElementById("stack_text").textContent = stack_count;
     document.getElementById("static_text").textContent = static_count;
     document.getElementById("tight_text").textContent = tight_count;
+
+    pagination("result_floss_table");
 }
 
 function getManalyzeInfo(manalyze)
@@ -231,7 +233,7 @@ function createHTML(objectData, elementId, index)
     html_code += '</table>';
 
     html_element.innerHTML = html_code;
-    $('#' + table_name).DataTable();
+    pagination(table_name);
 }
 
 function createHTML2(objectData, elementId)
@@ -263,7 +265,7 @@ function createHTML2(objectData, elementId)
     html_code += '</table>';
 
     html_element.innerHTML = html_code;
-    $('#' + table_name).DataTable();
+    pagination(table_name);
 }
 
 function createTRs(object)
@@ -390,7 +392,7 @@ function createHTML3(objectData, elementId)
     html_code += '</table>';
 
     html_element.innerHTML = html_code;
-    $('#' + table_name).DataTable();
+    pagination(table_name);
 }
 
 function checkArrayNullOrEmpty(obj) {
@@ -479,5 +481,10 @@ function createHTMLRules(rules, elementId)
     html_code += '</table>';
 
     html_element.innerHTML = html_code;
+    
+}
+
+function pagination(table_name)
+{
     $('#' + table_name).DataTable();
 }
