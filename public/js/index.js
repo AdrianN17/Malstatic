@@ -136,8 +136,6 @@ function getCapaInfo(capa)
     createHTML2(analysis, 'html_analysis');
     createHTML(meta.sample, 'html_sample');
     createHTMLRules(capa.rules, 'html_rules')
-
-
 }
 
 function getFlossInfo(floss)

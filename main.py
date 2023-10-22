@@ -2,6 +2,7 @@ from utility import *
 from fastapi import FastAPI, UploadFile, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 import uvicorn
 import base64 
 import os
@@ -19,6 +20,7 @@ app.add_middleware(
 actual_dir = os.path.dirname(os.path.abspath(__file__))
 
 templates = Jinja2Templates(directory="public")
+app.mount("/public", StaticFiles(directory="public"), name="static")
 
 @app.get("/")
 def read_root(request: Request):
