@@ -135,7 +135,7 @@ function getCapaInfo(capa)
     
     createHTML2(analysis, 'html_analysis');
     createHTML(meta.sample, 'html_sample');
-    createHTMLRules(capa.rules, 'html_rules')
+    createHTMLRules(capa.rules, 'html_rules');
 }
 
 function getFlossInfo(floss)
@@ -284,9 +284,9 @@ function createTRs(object)
 
         if (Array.isArray(value))
         {
-            value.forEach((v, count) => {
+            value.forEach((v) => {
                 html_code +=        '<tr>';
-                html_code +=            '<td>' + ((count === 0) ? data : "") + '</td>';
+                html_code +=            '<td>' + data + '</td>';
                 html_code +=            '<td>' + v + '</td>';
                 html_code +=        '</tr>';
             })       
@@ -332,15 +332,15 @@ function createTRs2(object)
 
             const list_data2 = Object.keys(value_object);
 
-            list_data2.forEach((key2, count) => {
+            list_data2.forEach((key2) => {
                 let value2 = value_object[key2];
 
                 if (Array.isArray(value2))
                 {
-                    value2.forEach((v, count2) => {
+                    value2.forEach((v) => {
                         html_code +=        '<tr>';
-                        html_code +=            '<td>' + ((count === 0) ? data : "") + '</td>';
-                        html_code +=            '<td>' + ((count2 === 0) ? key2 : "") + '</td>';
+                        html_code +=            '<td>' +  data  + '</td>';
+                        html_code +=            '<td>' +  key2 + '</td>';
                         html_code +=            '<td>' + v + '</td>';
                         html_code +=        '</tr>';   
                     })    
@@ -348,7 +348,7 @@ function createTRs2(object)
                 else 
                 {
                     html_code +=        '<tr>';
-                    html_code +=            '<td>' + ((count === 0) ? data : "") + '</td>';
+                    html_code +=            '<td>' + data  + '</td>';
                     html_code +=            '<td>' + key2 + '</td>';
                     html_code +=            '<td>' + value2 + '</td>';
                     html_code +=        '</tr>';
@@ -372,7 +372,7 @@ function createHTML3(objectData, elementId)
 
     let html_code = html_element.innerHTML;
 
-    const table_name = elementId+"_table"
+    const table_name = elementId+"_table";
 
     html_code += '<table id="' + table_name + '" class="table table-sm">';
     html_code +=    '<thead>';
@@ -417,14 +417,13 @@ function createHTMLRules(rules, elementId)
 
     let html_code = html_element.innerHTML;
 
-    const table_name = elementId+"_table"
+    const table_name = elementId+"_table";
 
     html_code += '<table id="' + table_name + '" class="table table-sm">';
         html_code +=    '<thead>';
         html_code +=        '<tr>';
         html_code +=            '<td>Rule</td>';
         html_code +=            '<td>Attribute</td>';
-        html_code +=            '<td>SubAttribute</td>';
         html_code +=            '<td>Value</td>';
         html_code +=        '</tr>';
         html_code +=    '</thead>';
@@ -439,7 +438,6 @@ function createHTMLRules(rules, elementId)
         html_code +=        '<tr>';
         html_code +=        '<td>' + rule + '</td>';
         html_code +=        '<td> matches </td>';
-        html_code +=        '<td> </td>';
         html_code +=        '<td>' + matches + '</td>';
         html_code +=        '</tr>';
 
@@ -447,11 +445,10 @@ function createHTMLRules(rules, elementId)
         {
             const attack_attributes = Object.keys(attack_list[0]);
 
-            attack_list.forEach((attack, count) => {
+            attack_list.forEach((attack) => {
                 attack_attributes.forEach(attack_key => {
                     html_code +=        '<tr>';
-                    html_code +=        '<td> </td>';
-                    html_code +=        '<td>' + ((count === 0) ? "attack" : "") + '</td>';
+                    html_code +=        '<td>' + "attack" + '</td>';
                     html_code +=        '<td>' + attack_key + '</td>';
                     html_code +=        '<td>' + attack[attack_key] + '</td>';
                     html_code +=        '</tr>';
@@ -463,11 +460,10 @@ function createHTMLRules(rules, elementId)
         {
             const mbc_attributes = Object.keys(mbc_list[0]);
 
-            mbc_list.forEach((mbc, count) => {
+            mbc_list.forEach((mbc) => {
                 mbc_attributes.forEach(mbc_key => {
                     html_code +=        '<tr>';
-                    html_code +=        '<td> </td>';
-                    html_code +=        '<td>' + ((count === 0) ? "attack" : "") + '</td>';
+                    html_code +=        '<td>' + "mbc" + '</td>';
                     html_code +=        '<td>' + mbc_key + '</td>';
                     html_code +=        '<td>' + mbc[mbc_key] + '</td>';
                     html_code +=        '</tr>';
@@ -481,7 +477,7 @@ function createHTMLRules(rules, elementId)
     html_code += '</table>';
 
     html_element.innerHTML = html_code;
-    
+    pagination(table_name);
 }
 
 function pagination(table_name)
