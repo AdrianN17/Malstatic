@@ -1,5 +1,8 @@
 import subprocess
 import json
+import r2pipe
+import base64 
+import os
 
 def floss_api_response(dir, path):
     command1 = f'floss -j -q "{path} "'
@@ -51,3 +54,33 @@ def manalyze_api_response(dir, path):
         print(f"Error with script : {e}")
         
     return output
+
+def radare2_api_response(dir, path):
+    
+    r2 = r2pipe.open(path)
+    asm = r2.cmd("pd")
+    r2.quit()
+    
+    parts = path.split("\\")
+    file_name = parts[-1]
+    
+    return {"filename" : file_name, "radare2" : (base64.b64encode(asm.encode()).decode())}
+
+def save_file_api_response(actual_dir, file):
+    file_path = ""
+    
+    tmp_dir = os.path.join(actual_dir, "tmp")
+
+    if not os.path.exists(tmp_dir):
+        os.makedirs(tmp_dir)
+
+    file_path = os.path.join(tmp_dir, file.filename)
+
+    with open(file_path, "wb") as temp_file:
+        temp_file.write(file.file.read())
+        
+    if(len(file_path) != 0):
+        return {"status": 201 , "message" : "PE file uploaded", "data" : (base64.b64encode(file_path.encode()).decode())}
+    else:
+        return {"status": 400 , "message" : "Bad Request"}
+    

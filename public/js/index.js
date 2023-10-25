@@ -1,4 +1,4 @@
-const requests = 4;
+const requests = 5;
 let progress = 0;
 
 function updateProgressBar() {
@@ -52,6 +52,7 @@ function startUploadFile()
                     callManalyze(result);
                     callFloss(result);
                     callCapa(result);
+                    callRadare2(result);
                 } catch (e) {
                     console.error('Error al analizar la respuesta JSON:', e);
                 }
@@ -60,6 +61,48 @@ function startUploadFile()
     } else {
         console.log('Selecciona un archivo antes de enviarlo.');
     }
+}
+
+function callRadare2(json_data)
+{
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `http://127.0.0.1:8000/radare2?data=${json_data.data}`, true);
+    xhr.send();
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log('Solicitud GET exitosa.');
+
+            try {
+                const result = JSON.parse(xhr.responseText);
+                getRadare2(result.radare2, result.filename);
+                updateProgressBar();
+            } catch (e) {
+                console.error('Error al analizar la respuesta JSON:', e);
+            }
+        }
+    };
+}
+
+function getRadare2(base64Text, filename)
+{
+    const html_element = document.getElementById("html_code");
+    const decodedText = atob(base64Text);
+    html_element.textContent = decodedText;
+
+    const html_element2 = document.getElementById("html_code_base64");
+    html_element2.value = base64Text;
+
+    Prism.highlightAll();
+
+    const html_element3 = document.getElementById("downloadButton");
+    html_element3.disabled = false;
+
+    const html_element4 = document.getElementById("html_filename");
+    html_element4.value = filename;
+
+    filename
+    
 }
 
 function callManalyze(json_data)
@@ -201,7 +244,6 @@ function getImportDLL(import_dll, name_dll, index_dll)
     html_element.innerHTML = html_code;
 
     createHTML(import_dll,'html_imports', index_dll);
-    
 }
 
 
@@ -484,3 +526,18 @@ function pagination(table_name)
 {
     $('#' + table_name).DataTable();
 }
+
+downloadButton.addEventListener("click", () => {
+
+    const html_element2 = document.getElementById("html_code_base64");
+    const base64_content = html_element2.value
+
+    const html_element4 = document.getElementById("html_filename");
+    const filename = html_element4.value;
+
+    const downloadLink = document.createElement("a");
+    downloadLink.href = "data:text/plain;base64," + base64_content;
+    downloadLink.download = filename+".asm";
+
+    downloadLink.click();
+});

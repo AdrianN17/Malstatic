@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="css/prism.css">
+    <link rel="stylesheet" href="css/prism-synthwave84.css">
+</head>
+<body>
+
+<pre><code class="language-nasm theme-prism-dark">
+    ;-- entry0:
+
+    ;-- mainCRTStartup:
+
+    ;-- rip:
+
+    0x140001125      55             push rbp
+
+    0x140001126      4889e5         mov rbp, rsp
+
+    0x140001129      4883ec30       sub rsp, 0x30
+
+    0x14000112d      c745fcff0000.  mov dword [rbp - 4], 0xff  ; 255
+
+    0x140001134      488b05159700.  mov rax, qword [0x14000a850] ; [0x14000a850:8]=0x14000f0f0
+
+    0x14000113b      c70000000000   mov dword [rax], 0
+
+    0x140001141      e80e000000     call sym.__tmainCRTStartup
+
+    0x140001146      8945fc         mov dword [rbp - 4], eax
+
+    0x140001149      90             nop
+
+    0x14000114a      90             nop
+
+    0x14000114b      8b45fc         mov eax, dword [rbp - 4]
+
+    0x14000114e      4883c430       add rsp, 0x30
+
+    0x140001152      5d             pop rbp
+
+    0x140001153      c3             ret
+
+    ;-- __tmainCRTStartup:
+
+    0x140001154      55             push rbp
+
+    0x140001155      4889e5         mov rbp, rsp
+
+    0x140001158      4881ece00000.  sub rsp, 0xe0
+
+    0x14000115f      48c745f80000.  mov qword [rbp - 8], 0
+
+    0x140001167      c745f4000000.  mov dword [rbp - 0xc], 0
+
+    0x14000116e      488d8540ffff.  lea rax, [rbp - 0xc0]
+
+    0x140001175      41b868000000   mov r8d, 0x68              ; 'h' ; 104
+
+    0x14000117b      ba00000000     mov edx, 0
+
+    0x140001180      4889c1         mov rcx, rax
+
+    0x140001183      e818740000     call sym.memset
+
+    0x140001188      488b05c19600.  mov rax, qword [0x14000a850] ; [0x14000a850:8]=0x14000f0f0
+
+    0x14000118f      8b00           mov eax, dword [rax]
+
+    0x140001191      85c0           test eax, eax
+
+,=< 0x140001193      7413           je 0x1400011a8
+
+|   0x140001195      488d8540ffff.  lea rax, [rbp - 0xc0]
+
+|   0x14000119c      4889c1         mov rcx, rax
+
+|   0x14000119f      488b0586f000.  mov rax, qword [sym.imp.KERNEL32.dll_GetStartupInfoA] ; [0x14001022c:8]=0x10430 reloc.KERNEL32.dll_GetStartupInfoA ; "0\x04\x01"
+
+|   0x1400011a6      ffd0           call rax
+
+`-> 0x1400011a8      48c745e80000.  mov qword [rbp - 0x18], 0
+
+    0x1400011b0      c745dc300000.  mov dword [rbp - 0x24], 0x30 ; '0' ; 48
+
+    0x1400011b7      8b45dc         mov eax, dword [rbp - 0x24]
+
+    0x1400011ba      65488b00       mov rax, qword gs:[rax]
+
+    0x1400011be      488945d0       mov qword [rbp - 0x30], rax
+
+    0x1400011c2      488b45d0       mov rax, qword [rbp - 0x30]
+
+    0x1400011c6      488b4008       mov rax, qword [rax + 8]
+
+    0x1400011ca      488945e0       mov qword [rbp - 0x20], rax
+
+    0x1400011ce      c745f0000000.  mov dword [rbp - 0x10], 0
+
+,=< 0x1400011d5      eb21           jmp 0x1400011f8
+
+|   0x1400011d7      488b45e8       mov rax, qword [rbp - 0x18]
+
+|   0x1400011db      483b45e0       cmp rax, qword [rbp - 0x20]
+
+,==< 0x1400011df      7509           jne 0x1400011ea
+
+||   0x1400011e1      c745f0010000.  mov dword [rbp - 0x10], 1
+
+,===< 0x1400011e8      eb45           jmp 0x14000122f
+
+|`--> 0x1400011ea      b9e8030000     mov ecx, 0x3e8             ; 1000
+
+| |   0x1400011ef      488b056ef000.  mov rax, qword [sym.imp.KERNEL32.dll_Sleep] ; [0x140010264:8]=0x104ce reloc.KERNEL32.dll_Sleep
+
+| |   0x1400011f6      ffd0           call rax
+
+| `-> 0x1400011f8      488b05819500.  mov rax, qword [0x14000a780] ; [0x14000a780:8]=0x14000fbd8
+
+|     0x1400011ff      488945c8       mov qword [rbp - 0x38], rax
+
+|     0x140001203      488b45e0       mov rax, qword [rbp - 0x20]
+
+|     0x140001207      488945c0       mov qword [rbp - 0x40], rax
+
+|     0x14000120b      48c745b80000.  mov qword [rbp - 0x48], 0
+
+|     0x140001213      488b4dc0       mov rcx, qword [rbp - 0x40]
+
+|     0x140001217      488b45b8       mov rax, qword [rbp - 0x48]
+
+|     0x14000121b      488b55c8       mov rdx, qword [rbp - 0x38]
+
+|     0x14000121f      f0480fb10a     lock cmpxchg qword [rdx], rcx
+
+|     0x140001224      488945e8       mov qword [rbp - 0x18], rax
+
+|     0x140001228      48837de800     cmp qword [rbp - 0x18], 0
+
+|     0x14000122d      75a8           jne 0x1400011d7
+
+`---> 0x14000122f      488b055a9500.  mov rax, qword [0x14000a790] ; [0x14000a790:8]=0x14000fbd0
+
+    0x140001236      8b00           mov eax, dword [rax]
+
+
+</code></pre>
+
+<script src="js/prism.js"></script>
+<script>Prism.highlightAll();</script>
+
+</body>
+</html>
