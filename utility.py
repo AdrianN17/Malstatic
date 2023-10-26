@@ -4,8 +4,8 @@ import r2pipe
 import base64 
 import os
 
-def floss_api_response(dir, path):
-    command1 = f'floss -j -q "{path} "'
+def floss_api_response(path):
+    command1 = f'floss -j -q "{path}"'
     
     print(command1)
     
@@ -21,8 +21,8 @@ def floss_api_response(dir, path):
         
     return output
 
-def capa_api_response(dir, path):
-    command2 = f'capa -r capa-rules-4.0.0 -s sigs -j -q "{path} "'
+def capa_api_response(path):
+    command2 = f'capa -r /capa/rules -s /capa/sigs -j -q "{path}"'
     
     print(command2)
     
@@ -38,8 +38,8 @@ def capa_api_response(dir, path):
         
     return output
 
-def manalyze_api_response(dir, path):
-    command3 = f' {dir}/manalyze_x64/manalyze --dump=all --hashes --output json "{path} "'
+def manalyze_api_response(path):
+    command3 = f'manalyze --dump=all --hashes --output json "{path}"'
     
     print(command3)
     
@@ -55,16 +55,13 @@ def manalyze_api_response(dir, path):
         
     return output
 
-def radare2_api_response(dir, path):
+def radare2_api_response(path):
     
     r2 = r2pipe.open(path)
     asm = r2.cmd("pd")
     r2.quit()
     
-    parts = path.split("\\")
-    file_name = parts[-1]
-    
-    return {"filename" : file_name, "radare2" : (base64.b64encode(asm.encode()).decode())}
+    return {"filename" : os.path.basename(path), "radare2" : (base64.b64encode(asm.encode()).decode())}
 
 def save_file_api_response(actual_dir, file):
     file_path = ""
@@ -79,8 +76,11 @@ def save_file_api_response(actual_dir, file):
     with open(file_path, "wb") as temp_file:
         temp_file.write(file.file.read())
         
+    file_name = os.path.basename(file_path)
+        
     if(len(file_path) != 0):
-        return {"status": 201 , "message" : "PE file uploaded", "data" : (base64.b64encode(file_path.encode()).decode())}
+        return {"status": 201 , "message" : "PE file uploaded", "data" : (base64.b64encode(file_name.encode()).decode())}
     else:
         return {"status": 400 , "message" : "Bad Request"}
+    
     

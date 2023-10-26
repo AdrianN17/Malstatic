@@ -15,7 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-actual_dir = os.path.dirname(os.path.abspath(__file__))
+actual_dir = os.path.dirname(os.path.abspath(__file__)) 
 
 templates = Jinja2Templates(directory="public")
 app.mount("/public", StaticFiles(directory="public"), name="static")
@@ -31,22 +31,22 @@ def add_file(file: UploadFile):
 
 @app.get("/capa")
 def floss_file(data : str):
-    json_data = capa_api_response(actual_dir, base64.b64decode(data).decode())
+    json_data = capa_api_response(actual_dir + "/tmp/" + base64.b64decode(data).decode())
     return json_data
 
 @app.get("/floss")
 def floss_file(data : str):
-    json_data = floss_api_response(actual_dir, base64.b64decode(data).decode())
+    json_data = floss_api_response(actual_dir + "/tmp/" + base64.b64decode(data).decode())
     return json_data
 
 @app.get("/manalyze")
 def flare_file(data : str):
-    json_data = manalyze_api_response(actual_dir, base64.b64decode(data).decode())
+    json_data = manalyze_api_response(actual_dir + "/tmp/" + base64.b64decode(data).decode())
     return json_data
 
 @app.get("/radare2")
 def flare_file(data : str):
-    json_data = radare2_api_response(actual_dir, base64.b64decode(data).decode())
+    json_data = radare2_api_response(actual_dir + "/tmp/" + base64.b64decode(data).decode())
     return json_data
 
 if __name__ == "__main__":

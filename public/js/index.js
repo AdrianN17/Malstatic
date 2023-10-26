@@ -1,3 +1,5 @@
+const URL = "http://127.0.0.1:7071";
+
 const requests = 5;
 let progress = 0;
 
@@ -37,7 +39,7 @@ function startUploadFile()
         formData.append('file', file);
         
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://127.0.0.1:8000/file', true);
+        xhr.open('POST', URL+'/file', true);
         xhr.send(formData);
 
         disableInputFile();
@@ -48,6 +50,11 @@ function startUploadFile()
 
                 try {
                     const result = JSON.parse(xhr.responseText);
+
+                    let html_name = document.getElementById("file_name");
+                    html_name.textContent = "File : "  + atob(result.data);
+
+
                     updateProgressBar();
                     callManalyze(result);
                     callFloss(result);
@@ -66,7 +73,7 @@ function startUploadFile()
 function callRadare2(json_data)
 {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', `http://127.0.0.1:8000/radare2?data=${json_data.data}`, true);
+    xhr.open('GET', URL+`/radare2?data=${json_data.data}`, true);
     xhr.send();
 
     xhr.onreadystatechange = function() {
@@ -108,7 +115,7 @@ function getRadare2(base64Text, filename)
 function callManalyze(json_data)
 {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', `http://127.0.0.1:8000/manalyze?data=${json_data.data}`, true);
+    xhr.open('GET', URL+`/manalyze?data=${json_data.data}`, true);
     xhr.send();
 
     xhr.onreadystatechange = function() {
@@ -129,7 +136,7 @@ function callManalyze(json_data)
 function callFloss(json_data)
 {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', `http://127.0.0.1:8000/floss?data=${json_data.data}`, true);
+    xhr.open('GET', URL+`/floss?data=${json_data.data}`, true);
     xhr.send();
 
     xhr.onreadystatechange = function() {
@@ -150,7 +157,7 @@ function callFloss(json_data)
 function callCapa(json_data)
 {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', `http://127.0.0.1:8000/capa?data=${json_data.data}`, true);
+    xhr.open('GET', URL+`/capa?data=${json_data.data}`, true);
     xhr.send();
 
     xhr.onreadystatechange = function() {
@@ -207,11 +214,7 @@ function getManalyzeInfo(manalyze)
 {
     const pe_files = Object.entries(manalyze);
 
-    const name_file = pe_files[0][0];
     let current_pe_file = pe_files[0][1];
-
-    let html_name = document.getElementById("file_name");
-    html_name.textContent = "File : "  + name_file;
 
     getImports(current_pe_file.Imports);
     createHTML(current_pe_file.Hashes,'html_hashes');
